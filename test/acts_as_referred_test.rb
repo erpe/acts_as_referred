@@ -23,7 +23,6 @@ class ActsAsReferredTest < ActiveSupport::TestCase
 
   test "test_a_booking_referrer_host_should_be_nsa" do
     booking = prepare_booking(valid_booking_params)
-    puts booking.inspect
     assert_equal "www.nsa.gov", booking.referee.host
   end
 

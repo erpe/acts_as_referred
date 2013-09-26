@@ -57,7 +57,6 @@ module ActsAsReferred
     protected
 
     def _store_session
-      puts "preparing session"
 
       if _request = instance_variable_get(:@_request)
         unless _request.session.has_key?(:_origin)

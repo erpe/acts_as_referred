@@ -1,3 +1,37 @@
 = ActsAsReferred
 
-This project rocks and uses MIT-LICENSE.
+A gentle gem which offers the possibility to track referrer.
+When Object gets persistet to database a relational referee is (:after_create) persistet as well.
+
+== Status == 
+
+not yet production ready
+
+== Install == 
+
+at this stage only by github:
+so add to your Gemfile  
+
+  gem 'acts_as_referred', :git => 'git://github.com/erpe/acts_as_referred.git'
+
+afterwards run the rake task to create necessary database table
+
+  rake acts_as_referred:create_table
+
+add +acts_as_referred+ to your model e.g.
+
+  class Order < ActiveRecord::Base
+    acts_as_referred
+  end
+
+and the final step - adopt your ApplicationController with:
+
+  class ApplicationController < ActionController::Base
+    include ActsAsReferred::ControllerMethods
+  end
+
+== Background == 
+
+whenever a request travels through ApplicationController and initializes a session the delivered referrer is persisted in the session. 
+As soon as an ActiveRecord which includes +acts_as_referred+ gets created the stored referrer will be used to build a new *Referee*
+

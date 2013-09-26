@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130926122841) do
+ActiveRecord::Schema.define(version: 20130926221902) do
 
   create_table "bookings", force: true do |t|
     t.string   "thing"
@@ -28,11 +28,14 @@ ActiveRecord::Schema.define(version: 20130926122841) do
   end
 
   create_table "referees", force: true do |t|
-    t.integer  "referable_id"
-    t.string   "referable_type"
-    t.string   "referred_from"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer "referable_id"
+    t.string  "referable_type"
+    t.string  "raw"
+    t.string  "campaign"
+    t.string  "keywords"
   end
+
+  add_index "referees", ["referable_id"], name: "index_referees_on_referable_id"
+  add_index "referees", ["referable_type"], name: "index_referees_on_referable_type"
 
 end
