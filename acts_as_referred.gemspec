@@ -9,9 +9,8 @@ Gem::Specification.new do |s|
   s.version     = ActsAsReferred::VERSION
   s.authors     = ["rene paulokat"]
   s.email       = ["rene@so36.net"]
-  s.homepage    = "TODO"
   s.summary     = "Add referred functionality to AR"
-  s.description = "TODO: Description of ActsAsReferred."
+  s.description = "Description of ActsAsReferred."
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["test/**/*"]
