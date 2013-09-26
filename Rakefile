@@ -6,6 +6,8 @@ end
 
 require 'rdoc/task'
 
+Dir.glob('lib/tasks/*.rake').each {|r| import r}
+
 RDoc::Task.new(:rdoc) do |rdoc|
   rdoc.rdoc_dir = 'rdoc'
   rdoc.title    = 'ActsAsReferred'
@@ -13,9 +15,6 @@ RDoc::Task.new(:rdoc) do |rdoc|
   rdoc.rdoc_files.include('README.rdoc')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
-
-
-
 
 Bundler::GemHelper.install_tasks
 
@@ -27,6 +26,5 @@ Rake::TestTask.new(:test) do |t|
   t.pattern = 'test/**/*_test.rb'
   t.verbose = false
 end
-
 
 task default: :test
