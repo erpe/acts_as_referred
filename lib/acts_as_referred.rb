@@ -4,6 +4,49 @@ module ActsAsReferred
   included do
   end
 
+  module Model
+    class ::Referee < ActiveRecord::Base
+      self.table_name = 'referees'
+
+      # fields: campaign, 
+      #attr_reader :host, :scheme, :path, :query
+
+      belongs_to :referable, polymorphic: true 
+
+      before_create :process_referred_from
+      
+      def uri
+        has_referrer? ? URI.parse(referred_from) : nil
+      end
+
+      def host
+        has_referrer? ? URI.parse(referred_from).host : nil
+      end
+
+      def scheme
+        has_referrer? ? URI.parse(referred_from).scheme : nil
+      end
+
+      def query
+        has_referrer? ? URI.parse(referred_from).query : nil
+      end
+
+      def path
+        has_referrer? ? URI.parse(referred_from).path : nil
+      end
+
+      def has_referrer?
+        true if referred_from
+      end
+
+      private
+
+      def process_referred_from
+
+      end
+    end
+  end
+
   module ControllerMethods
     extend ActiveSupport::Concern
 
@@ -29,10 +72,9 @@ module ActsAsReferred
        
   module ClassMethods
     def acts_as_referred(options = {})
-      cattr_accessor :referrer_field
-      self.referrer_field = (options[:referrer_field] || :referred_from).to_s
       
-      before_create :fill_referrer_field
+      has_one :referee, as: :referable, dependent: :destroy, class_name: 'Referee'
+      after_create :create_referrer
 
       include ActsAsReferred::InstanceMethods
     end
@@ -41,34 +83,12 @@ module ActsAsReferred
 
   module InstanceMethods
     
-    def referrer_uri
-      has_referrer? ? URI.parse(self.send(self.referrer_field)) : nil
-    end
-
-    def referrer_host
-      has_referrer? ? URI.parse(self.send(self.referrer_field)).host : nil
-    end
-
-    def referrer_scheme
-      has_referrer? ? URI.parse(self.send(self.referrer_field)).scheme : nil
-    end
-
-    def referrer_query
-      has_referrer? ? URI.parse(self.send(self.referrer_field)).query : nil
-    end
-
-    def referrer_path
-      has_referrer? ? URI.parse(self.send(self.referrer_field)).path : nil
-    end
-
-    def has_referrer?
-      true if self.send(self.referrer_field)
-    end
+    
 
     private
 
-    def fill_referrer_field
-      self.send("#{self.referrer_field}=", _get_referrer )
+    def create_referrer
+      self.create_referee(referred_from: _get_referrer ) if _get_referrer
     end
   end
 

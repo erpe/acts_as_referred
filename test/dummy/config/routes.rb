@@ -1,4 +1,5 @@
 Dummy::Application.routes.draw do
+
   resources :orders
 
   resources :bookings
