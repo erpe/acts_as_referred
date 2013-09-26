@@ -3,11 +3,11 @@
 A gentle gem which offers the possibility to track referrer.
 When Object gets persistet to database a relational referee is (:after_create) persistet as well.
 
-== Status == 
+== Status 
 
 not yet production ready
 
-== Install == 
+== Install 
 
 at this stage only by github:
 so add to your Gemfile  
@@ -30,7 +30,7 @@ and the final step - adopt your ApplicationController with:
     include ActsAsReferred::ControllerMethods
   end
 
-== Background == 
+== Background  
 
 whenever a request travels through ApplicationController and initializes a session the delivered referrer is persisted in the session. 
 As soon as an ActiveRecord which includes +acts_as_referred+ gets created the stored referrer will be used to build a new *Referee*
