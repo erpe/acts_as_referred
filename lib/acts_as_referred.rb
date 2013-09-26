@@ -16,27 +16,27 @@ module ActsAsReferred
       before_create :process_referred_from
       
       def uri
-        has_referrer? ? URI.parse(referred_from) : nil
+        has_referrer? ? URI.parse(raw) : nil
       end
 
       def host
-        has_referrer? ? URI.parse(referred_from).host : nil
+        has_referrer? ? URI.parse(raw).host : nil
       end
 
       def scheme
-        has_referrer? ? URI.parse(referred_from).scheme : nil
+        has_referrer? ? URI.parse(raw).scheme : nil
       end
 
       def query
-        has_referrer? ? URI.parse(referred_from).query : nil
+        has_referrer? ? URI.parse(raw).query : nil
       end
 
       def path
-        has_referrer? ? URI.parse(referred_from).path : nil
+        has_referrer? ? URI.parse(raw).path : nil
       end
 
       def has_referrer?
-        true if referred_from
+        true if raw
       end
 
       private
@@ -87,7 +87,13 @@ module ActsAsReferred
     private
 
     def create_referrer
-      self.create_referee(referred_from: _get_referrer ) if _get_referrer
+      self.create_referee(raw: _get_referrer ) if _get_referrer
+    end
+  end
+
+  class RakeTasks < Rails::Railtie
+    rake_tasks do
+      Dir[File.join(File.dirname(__FILE__),'tasks/*.rake')].each { |f| load f }
     end
   end
 
