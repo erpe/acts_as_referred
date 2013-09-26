@@ -3,6 +3,29 @@ module ActsAsReferred
   
   included do
   end
+
+  module ControllerMethods
+    extend ActiveSupport::Concern
+
+    included do
+      before_filter :_store_session
+    end
+
+    protected
+
+    def _store_session
+      puts "preparing session"
+
+      if _request = instance_variable_get(:@_request)
+        unless _request.session.has_key?(:_origin)
+          _request.session[:_origin] = _request.referrer
+        end
+      end
+
+      ActiveRecord::Base.send(:define_method, '_get_referrer', proc { _request.session[:_origin]} )
+    end
+    
+  end
        
   module ClassMethods
     def acts_as_referred(options = {})
@@ -45,7 +68,7 @@ module ActsAsReferred
     private
 
     def fill_referrer_field
-      self.send("#{self.referrer_field}=", "fooobar")
+      self.send("#{self.referrer_field}=", _get_referrer )
     end
   end
 

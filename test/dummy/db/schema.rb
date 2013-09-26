@@ -11,16 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130925163445) do
+ActiveRecord::Schema.define(version: 20130926092429) do
 
   create_table "bookings", force: true do |t|
-    t.string   "referred_from"
+    t.string   "thing"
     t.string   "referrer"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "orders", force: true do |t|
+    t.string   "thing"
     t.string   "referred_from"
     t.datetime "created_at"
     t.datetime "updated_at"
