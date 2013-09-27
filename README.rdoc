@@ -27,7 +27,7 @@ add +acts_as_referred+ to your model e.g.
 and the final step - adopt your ApplicationController with:
 
   class ApplicationController < ActionController::Base
-    include ActsAsReferred::ControllerMethods
+    include ActsAsReferred::Controller
   end
 
 == Background  
