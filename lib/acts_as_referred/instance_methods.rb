@@ -1,12 +1,16 @@
 module ActsAsReferred
   module InstanceMethods
     
-    delegate :campaign, to: :referee 
-
     private
 
     def create_referrer
-      self.create_referee(raw: _get_referrer ) if _get_referrer
+      _origin = _get_referrer if _get_referrer
+      _request = _get_request if _get_request
+      _utm = cookies['__utmz']
+      if _origin || _request
+        self.create_referee(origin: _origin, request: _request, utmz: _utm ) 
+      end
     end
+
   end
 end
