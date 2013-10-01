@@ -1,7 +1,14 @@
 = ActsAsReferred
 
-A gentle gem which offers the possibility to track referrer.
-When Object gets persistet to database a relational referee is (:after_create) persistet as well.
+A gentle gem which offers the possibility to track referrer and campaigning.
+After an ActiveRecord-instance that includes +acts_as_referred+ gets persistet to your database a relational +Referee+ is persistet as well.
+
+A +before_action+ included to ApplicationController scans the incoming request for specific data supplied in the request-url. 
+
+This information is stored in a cookie and in the session as well. The created cookie is valid for 1 month. 
+
+The action then makes this data available to your model. When supplied with +acts_as_referred+ your pimped model will make use of a +after_create+ action to create a relational +Referee+ after it was created.
+
 
 == Status 
 
@@ -31,38 +38,36 @@ and the final step - adopt your ApplicationController with:
   end
 
 
-acts_as_referred supports manual tagged campaigns 
++acts_as_referred+ supports manual tagged campaigns 
 
-if you use google-adwords you have to define manual-url-tagging instead of googles default auto-tagging
+If you use google-adwords you have to define manual-url-tagging instead of googles default auto-tagging
 
-auto-tagging (gclid) is recognized as campaign but can not be resolved. 
+Auto-tagging (gclid) is recognized as campaign but can not be resolved. 
 (could be by parsing e.g. google-analytics cookies - but i think its kind of bad practice to relay on googles cookie-syntax)
 
 
 == Usage 
 
-your Order now has a relation to *Referee* on creation:
-you can query referees like:
+A example Order-model which includes +acts_as_referred+ has a relation to *Referee* on creation
+you can query referees after relational order was created:
 
-  (...somehow a request created a new Order )
 
-order.referee.is_campaign::
+[order.referee.is_campaign]
   returns true if request supplied campaign-arguments
 
-  recognized arguments:
-    utm_campaign, utm_term, pk_campaign, pk_term
-  
-
-order.referee.campaign::
+[order.referee.campaign]
   returns campaign name if supplied by tagging 
 
-order.referee.keywords::
+[order.referee.keywords]
   returns supplied keywords in the request.
 
-order.referee.host::
+[order.referee.host]
   returns referrer-hostname
 
-Referee.campaigns::
+[order.referee.path]
+  returns path part of request
+
+[Referee.campaigns]
   returns collection of referee-instances connected to a campaign
 
 
@@ -70,4 +75,15 @@ Referee.campaigns::
 
 whenever a request travels through ApplicationController and initializes a session the delivered referrer is persisted in the session. 
 As soon as an ActiveRecord which includes +acts_as_referred+ gets created the stored referrer will be used to build a new *Referee*
+
+[A typical request coming in from adwords (non-auto-tagging!) looks like]
+  
+  http://example.com/terror-in-baskets?utm_campaign=NSA&utm_term=PRISM&utm_medium=intercepted&utm_source=fbook
+
+[If you prefer  - what i'd  apreciate - Piwik as privacy-aware tracking]
+  
+  http://example.com/terror-in-baskets?pk_campaign=NSA&pk_kwd=PRISM
+
++ActsAsReferred+ stores the supplied campaign and keywords with in a +Referee+
+
 

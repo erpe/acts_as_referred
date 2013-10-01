@@ -3,6 +3,7 @@ module ActsAsReferred
     
     private
 
+    # after create hook to create a corresponding +Referee+
     def create_referrer
       if struct = _get_reqref
 

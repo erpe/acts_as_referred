@@ -29,8 +29,8 @@ class ActsAsReferredTest < ActiveSupport::TestCase
     assert_equal 'google.com', prepare_booking(google_params).referee.origin_host
   end
 
-  test "test_a_booking_referrer_path_should_be_about" do
-    assert_equal '/foo', prepare_booking(piwik_params).referee.path
+  test "test_a_booking_request_path_should_be_foo" do
+    assert_equal '/foo', prepare_booking(piwik_params).referee.request_path
   end
 
   test 'test_a_booking_query' do
@@ -52,6 +52,10 @@ class ActsAsReferredTest < ActiveSupport::TestCase
   test 'test_referee_scope_campaigns_should_return_one' do
     prepare_booking(google_params)
     assert_equal 1,   Referee.campaigns.count
+  end
+
+  test 'test_booking_keywords_should_be_present' do
+    assert_equal 'dynamite', prepare_booking(google_params).referee.keywords
   end
 
   def no_referer_params

@@ -1,5 +1,6 @@
 module ActsAsReferred
-  
+ 
+  # Namespce for controller-related functionality
   module Controller
     extend ActiveSupport::Concern
 
@@ -9,7 +10,9 @@ module ActsAsReferred
     end
 
     protected
-
+    
+    # The before_filter which processes necessary data for 
+    # +acts_as_referred+ - models
     def _supply_model_hook
 
       # 3.2.1 -> adwords auto-tagging - (show hint to manual tag adwords):
@@ -22,6 +25,7 @@ module ActsAsReferred
       # e.g.: "req=http://foo/baz?utm_campaign=plonk|ref=http://google.com/search|count=0"
       
       tmp = session[:__reqref]
+      _struct = nil
       if tmp
         arr = tmp.split('|')
         _struct = OpenStruct.new(
@@ -29,8 +33,6 @@ module ActsAsReferred
                     referrer_url: minlength_or_nil(arr[1].split('=',2)[1]),
                     visit_count: arr[2].split('=',2)[1].to_i
                     )
-      else
-        _struct = OpenStruct.new
       end
 
       ActiveRecord::Base.send(
@@ -43,7 +45,10 @@ module ActsAsReferred
 
     private
 
-
+    # checks for existing +__reqref+ key in session
+    # if not found checks for signed cookie with key +__reqref+
+    # if this is the initial request to our site, we write a cookie with 
+    # referrer and request.url
     def _check_cookie_and_session
       args = {}
       if session[:__reqref]
@@ -71,10 +76,6 @@ module ActsAsReferred
       arr = tmp.split("|")
       arr[-1] = "ret=#{arr[-1].split('=')[-1].to_i + 1}"
       arr.join('|')
-    end
-
-    def session_to_hash
-      session[:__reqref].split('|')
     end
 
     def minlength_or_nil(string)
