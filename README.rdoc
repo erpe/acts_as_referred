@@ -1,3 +1,6 @@
+
+{<img src="https://badge.fury.io/rb/acts_as_referred.png" alt="Gem Version" />}[http://badge.fury.io/rb/acts_as_referred]
+
 = ActsAsReferred
 
 A gentle gem which offers the possibility to track referrer and campaigning.
