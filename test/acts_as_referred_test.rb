@@ -49,6 +49,11 @@ class ActsAsReferredTest < ActiveSupport::TestCase
     assert_equal nil, prepare_booking(direct_params).referee.is_campaign
   end
 
+  test 'test_referee_scope_campaigns_should_return_one' do
+    prepare_booking(google_params)
+    assert_equal 1,   Referee.campaigns.count
+  end
+
   def no_referer_params
     { 
       request: "http://domain.com/foo?pk_campaign=Explosives&pk_term=dynamite"

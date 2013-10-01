@@ -30,6 +30,38 @@ and the final step - adopt your ApplicationController with:
     include ActsAsReferred::Controller
   end
 
+
+acts_as_referred supports manual tagged campaigns 
+
+if you use google-adwords you have to define manual-url-tagging instead of googles default auto-tagging
+
+auto-tagging (gclid) is recognized as campaign but can not be resolved. 
+(could be by parsing e.g. google-analytics cookies - but i think its kind of bad practice to relay on googles cookie-syntax)
+
+
+== Usage 
+
+your Order now has a relation to *Referee* on creation:
+you can query referees like:
+
+  (...somehow a request created a new Order )
+
+order.referee.is_campaign::
+  returns true if request supplied campaign-arguments
+
+  recognized arguments:
+    utm_campaign, utm_term, pk_campaign, pk_term
+  
+
+order.referee.campaign::
+  returns campaign name if supplied by tagging 
+
+order.referee.keywords::
+  returns supplied keywords in the request.
+
+order.referee.host::
+  returns referrer-hostname
+
 == Background  
 
 whenever a request travels through ApplicationController and initializes a session the delivered referrer is persisted in the session. 

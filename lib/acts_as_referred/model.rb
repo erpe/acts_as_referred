@@ -21,6 +21,8 @@ module ActsAsReferred
 
       before_create :process_request_and_referrer
 
+      scope :campaigns, -> { where('is_campaign=?', true) }
+
       # referrer - returns URI
       #
       def origin_uri
