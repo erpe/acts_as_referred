@@ -112,7 +112,7 @@ module ActsAsReferred
           when 'pk_campaign'
             self.campaign = hash[key]
             retval = true
-          when 'pk_term'
+          when 'pk_kwd'
             self.keywords = hash[key]
             retval = true
           end
