@@ -18,7 +18,7 @@ module ActsAsReferred
       
       self.table_name = 'referees'
 
-      belongs_to :referable, polymorphic: true, dependent: :destroy
+      belongs_to :referable, polymorphic: true
 
       before_create :process_request_and_referrer
 
