@@ -62,6 +62,10 @@ order.referee.keywords::
 order.referee.host::
   returns referrer-hostname
 
+Referee.campaigns::
+  returns collection of referee-instances connected to a campaign
+
+
 == Background  
 
 whenever a request travels through ApplicationController and initializes a session the delivered referrer is persisted in the session. 
