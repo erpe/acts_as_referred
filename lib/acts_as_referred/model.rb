@@ -5,12 +5,11 @@ module ActsAsReferred
     # Represents a Referee - 
     # *attributes*
     # origin:: the full URI of referrer
-    # path:: the requested path
-    # query:: the query-string - e.g. ?pk_campaign=terror&pk_kwd=usa
+    # origin_host:: dns-name of referrer
+    # request:: the request
+    # request_query:: the query-string - may be nil
     # campaign:: the supplied campaign-name in query
     # keywords:: the supplied keywords in query
-    # source:: e.g. by utm_source 'newsletter'
-    # utmz:: google cpc cookie
     # is_campaign:: if this referee is from campaign
     # is_organic:: if this referee is by organic search
     # is_natural:: if this referee is direct
@@ -31,7 +30,7 @@ module ActsAsReferred
       # referrer - returns host part 
       #
       def host
-        has_referrer? ? URI.parse(origin).host : nil
+        origin_host
       end
 
       # request - returns path
@@ -49,29 +48,93 @@ module ActsAsReferred
         true if request
       end
 
+      def has_query?
+        true if URI.parse(request).query
+      end
+
       private
 
-      # 1. referring-host        e.g: google.com/search?q=tracking+gem
-      # 2. request.query_string  
-      # 2.1. from campaign:
-      # 2.2. organic
-      # 2.3. 
-
       def process_request_and_referrer
-        process_request if request  
         process_origin if origin
-        process_utmz if utmz
+        
+        if request && URI.parse(request).query
+          self.request_query = URI.parse(request).query
+          if process_request
+            self.is_campaign = true
+          end
+        end
       end
 
       def process_request
-        query = URI.parse(request).query
-        case query
-        when =~ /pwk_campaign/
-        when =~ // 
+        if self.request_query
+          if self.request_query.match(/utm_campaign/) || self.request_query.match(/utm_term/)
+            return process_google_tagged(self.request_query)
+          end
+          if self.request_query.match(/pk_campaign/) || self.request_query.match(/pk_term/)
+            return process_piwik_tagged(self.request_query)
+          end
+          if self.request_query.match(/gclid/)
+            return process_google_auto_tagged(self.request_query)
+          end
+        end
       end
 
+      
+      # we only care about campaign name and keywords
+      #
+      def process_google_tagged(string)
+        hash = Hash[* string.split('&').collect { |i| i.split('=') }.flatten]
+        retval = nil
+        hash.keys.each do |key|
+          case key
+          #when 'utm_source'
+          #  source = hash[key]
+          when 'utm_campaign'
+            self.campaign = hash[key]
+            retval = true
+          #when 'utm_medium'
+          #  medium = hash[key]
+          when 'utm_term'
+            self.keywords = hash[key]
+            retval = true
+          end
+        end
+        retval
+      end
+
+      def process_piwik_tagged(string)
+        hash = Hash[*(string.split('&').collect { |i| i.split('=') }.flatten)]
+        retval = nil
+        hash.keys.each do |key|
+          case key
+          when 'pk_campaign'
+            self.campaign = hash[key]
+            retval = true
+          when 'pk_term'
+            self.keywords = hash[key]
+            retval = true
+          end
+        end
+        retval
+      end
+
+      # adwords set to autotagging
+      # no chance to get campaign info by url
+      # would have to do cookie parsing - this sucks
+      #
+      def process_google_auto_tagged(string)
+        hash = Hash[* string.split('|').collect { |i| i.split('=') }.flatten]
+        retval = nil
+        if hash['gclid']
+          self.campaign = "Adwords - autotagged: #{hash['gclid']}"
+          self.is_campaign = true
+          retval = true
+        end
+        retval
+      end
+      
       def process_origin
-        origin_host = URI.parse(origin).host
+        self.origin_host = URI.parse(origin).host
       end
 
     end

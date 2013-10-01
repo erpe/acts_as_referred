@@ -33,8 +33,8 @@ module ActsAsReferred
 
       ActiveRecord::Base.send(
                               :define_method, 
-                              '_get_referrer', 
-                              proc { _get_request } 
+                              '_get_reqref', 
+                              proc { _process_struct } 
                              )
     end
 
@@ -43,7 +43,7 @@ module ActsAsReferred
 
     private 
 
-    def _get_request
+    def _process_struct
       tmp = session[:__reqref]
       if tmp
         arr = tmp.split('|')

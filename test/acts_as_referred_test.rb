@@ -1,61 +1,88 @@
 require 'test_helper'
 
 class ActsAsReferredTest < ActiveSupport::TestCase
-
+  
   def prepare_booking(params)
-    Booking.send(:define_method, '_get_referrer', -> { params[:referred_from] } )
-    Booking.create()
+    struct = OpenStruct.new( request_url: params[:request], referrer_url: params[:referrer], count: 0)
+    Booking.send(:define_method, '_get_reqref', -> { struct } )
+    Booking.create
   end
 
-  def prepare_order(params)
-    Order.send(:define_method, '_get_referrer', -> { params[:referred_from] } )
-    Order.create()
+  def prepare_booking_no_referrer(params)
+    struct = OpenStruct.new( request_url: params[:request], referrer_url: nil, count: 0)
+    Booking.send(:define_method, '_get_reqref', -> { struct } )
+    Booking.create
   end
 
-  def prepare_order_no_referrer
-    Order.send(:define_method, '_get_referrer', -> { nil })
-    Order.create
-  end
+  
 
   test "truth" do
     assert_kind_of Module, ActsAsReferred
   end
 
   test "test_a_booking_referrer_host_should_be_nsa" do
-    booking = prepare_booking(valid_booking_params)
-    assert_equal "www.nsa.gov", booking.referee.host
+    booking = prepare_booking(piwik_params)
+    assert_equal "www.nsa.gov", booking.referee.origin_host
   end
 
-  test "test_a_order_referrer_scheme_should_be_http" do
-    assert_equal 'http', prepare_order(valid_order_params).referee.scheme
+  test "test_a_booking_referrer_host_should_be_google" do
+    assert_equal 'google.com', prepare_booking(google_params).referee.origin_host
   end
 
-  test "test_a_order_referrer_path_should_be_about" do
-    assert_equal '/about/values/index.shtml', prepare_order(valid_order_params).referee.path
+  test "test_a_booking_referrer_path_should_be_about" do
+    assert_equal '/foo', prepare_booking(piwik_params).referee.path
   end
 
-  test 'test_a_order_query' do
-    assert_equal 'attr=terror&reason=politics', prepare_order(valid_order_params).referee.query
+  test 'test_a_booking_query' do
+    assert_equal 'pk_campaign=Explosives&pk_term=dynamite', prepare_booking(piwik_params).referee.request_query
   end
 
   test 'test_a_order_with_no_referrer_should_return_nil' do
-    assert_equal nil, prepare_order_no_referrer.referee
+    assert_equal nil, prepare_booking_no_referrer(no_referer_params).referee.origin
   end
 
-  def valid_booking_params
-    { referred_from: 'http://www.nsa.gov/about/values/index.shtml?attr=terror&reason=politics' }
+  test 'test_a_booking_autotagged_should_return_campaign' do
+    assert_equal true, prepare_booking(google_params_autotagged).referee.is_campaign 
   end
 
-  def valid_order_params
-    { referred_from: 'http://www.nsa.gov/about/values/index.shtml?attr=terror&reason=politics'}
+  test 'test_a_booking_with_no_campaign_should_return_is_campaign_nil' do
+    assert_equal nil, prepare_booking(direct_params).referee.is_campaign
   end
 
-  def order_google_params
-    { referred_from: 'https://play.google.com/store/apps/details?&referrer=utm_source%3Dnewsletter%26utm_medium%3Dcpc%26utm_term%3Dnsa%252Bsucks%26utm_campaign%3Dterrorcampaign' }
+  def no_referer_params
+    { 
+      request: "http://domain.com/foo?pk_campaign=Explosives&pk_term=dynamite"
+    }
+
   end
 
-  def piwik_campaign_params
-
+  def direct_params
+    {
+    request: "http://domain.com/foo",
+    referrer: "http://domain.com"
+    }
   end
+
+  def piwik_params
+    { 
+      referrer: 'http://www.nsa.gov/about/values/index.shtml?attr=terror&reason=politics',
+      request: "http://domain.com/foo?pk_campaign=Explosives&pk_term=dynamite"
+    }
+  end
+
+  def google_params
+    { 
+      referrer: 'https://google.com?q=store',
+      request: "http://domain.com/foo?utm_campaign=Explosives&utm_term=dynamite"
+    }
+  end
+
+  def google_params_autotagged
+    { 
+      referrer: 'https://google.com?q=store',
+      request: "http://domain.com/foo?gclid=236428346782346283434"
+    }
+  end
+  
 end
 

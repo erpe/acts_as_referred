@@ -4,13 +4,16 @@ module ActsAsReferred
     private
 
     def create_referrer
-      _origin = _get_referrer if _get_referrer
-      _request = _get_request if _get_request
-      _utm = cookies['__utmz']
-      if _origin || _request
-        self.create_referee(origin: _origin, request: _request, utmz: _utm ) 
+      if struct = _get_reqref
+
+        self.create_referee(
+                    origin: struct.referrer_url, 
+                    request: struct.request_url, 
+                    visits: struct.visit_count
+                    )
       end
     end
 
   end
 end
+
