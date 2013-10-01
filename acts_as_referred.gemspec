@@ -9,13 +9,13 @@ Gem::Specification.new do |s|
   s.version     = ActsAsReferred::VERSION
   s.authors     = ["rene paulokat"]
   s.email       = ["rene@so36.net"]
-  s.summary     = "Add referred functionality to AR"
-  s.description = "Description of ActsAsReferred."
+  s.summary     = "Add tracking functionality to AR"
+  s.description = "ActsAsReferred adds ability to AR-descendants to be supplied with a Referee - referrer and e.g. campaignin"
+  s.homepage    = "http://github.com/erpe/acts_as_referred"
+  s.license     = 'MIT'
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["test/**/*"]
-
   s.add_dependency "rails", "~> 4.0.0"
-
   s.add_development_dependency "sqlite3"
 end
