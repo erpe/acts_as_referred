@@ -7,7 +7,7 @@ class CreateReferee < ActiveRecord::Migration
       t.text :origin
       t.string :origin_host
       t.text :request
-      t.string :request_query
+      t.text :request_query
       t.string :campaign
       t.string :keywords
       t.integer :visits
