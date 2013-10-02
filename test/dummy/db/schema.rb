@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131001152526) do
+ActiveRecord::Schema.define(version: 20131002105257) do
 
   create_table "bookings", force: true do |t|
     t.string   "thing"
@@ -24,9 +24,9 @@ ActiveRecord::Schema.define(version: 20131001152526) do
     t.integer "referable_id"
     t.string  "referable_type"
     t.boolean "is_campaign"
-    t.string  "origin"
+    t.text    "origin"
     t.string  "origin_host"
-    t.string  "request"
+    t.text    "request"
     t.string  "request_query"
     t.string  "campaign"
     t.string  "keywords"

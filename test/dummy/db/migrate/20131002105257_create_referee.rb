@@ -4,9 +4,9 @@ class CreateReferee < ActiveRecord::Migration
       t.integer :referable_id
       t.string :referable_type
       t.boolean :is_campaign
-      t.string :origin
+      t.text :origin
       t.string :origin_host
-      t.string :request
+      t.text :request
       t.string :request_query
       t.string :campaign
       t.string :keywords

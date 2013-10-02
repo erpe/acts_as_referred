@@ -5,9 +5,9 @@ namespace :acts_as_referred do
     args =  %w{ referable_id:integer:index 
                 referable_type:string:index 
                 is_campaign:boolean:index
-                origin:string
+                origin:text
                 origin_host:string
-                request:string 
+                request:text 
                 request_query:string
                 campaign:string 
                 keywords:string
