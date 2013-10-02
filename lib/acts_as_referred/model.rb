@@ -73,7 +73,7 @@ module ActsAsReferred
           if self.request_query.match(/utm_campaign/) || self.request_query.match(/utm_term/)
             return process_google_tagged(self.request_query)
           end
-          if self.request_query.match(/pk_campaign/) || self.request_query.match(/pk_term/)
+          if self.request_query.match(/pk_campaign/) || self.request_query.match(/pk_kwd/)
             return process_piwik_tagged(self.request_query)
           end
           if self.request_query.match(/gclid/)
