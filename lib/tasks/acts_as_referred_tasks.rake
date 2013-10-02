@@ -8,7 +8,7 @@ namespace :acts_as_referred do
                 origin:text
                 origin_host:string
                 request:text 
-                request_query:string
+                request_query:text
                 campaign:string 
                 keywords:string
                 visits:integer
