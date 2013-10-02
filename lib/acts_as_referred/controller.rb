@@ -50,7 +50,6 @@ module ActsAsReferred
     # if this is the initial request to our site, we write a cookie with 
     # referrer and request.url
     def _check_cookie_and_session
-      args = {}
       if session[:__reqref]
         tmp = session[:__reqref]
       else
