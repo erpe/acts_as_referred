@@ -1,5 +1,5 @@
 
-{<img src="https://badge.fury.io/rb/acts_as_referred.png" alt="Gem Version" />}[http://badge.fury.io/rb/acts_as_referred]
+{<img src="https://badge.fury.io/rb/acts_as_referred.png" alt="Gem Version" />}[http://badge.fury.io/rb/acts_as_referred] {<img src="https://travis-ci.org/[YOUR_GITHUB_USERNAME]/[YOUR_PROJECT_NAME].png" />}[https://travis-ci.org/[YOUR_GITHUB_USERNAME]/[YOUR_PROJECT_NAME]]
 
 = ActsAsReferred
 
