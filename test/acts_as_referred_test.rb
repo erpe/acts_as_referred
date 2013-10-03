@@ -34,7 +34,7 @@ class ActsAsReferredTest < ActiveSupport::TestCase
   end
 
   test 'test_a_booking_query' do
-    assert_equal 'pk_campaign=Explosives&pk_term=dynamite', prepare_booking(piwik_params).referee.request_query
+    assert_equal 'pk_campaign=Explosives&pk_kwd=dynamite', prepare_booking(piwik_params).referee.request_query
   end
 
   test 'test_a_order_with_no_referrer_should_return_nil' do
@@ -60,7 +60,7 @@ class ActsAsReferredTest < ActiveSupport::TestCase
 
   def no_referer_params
     { 
-      request: "http://domain.com/foo?pk_campaign=Explosives&pk_term=dynamite"
+      request: "http://domain.com/foo?pk_campaign=Explosives&pk_kwd=dynamite"
     }
 
   end
@@ -75,7 +75,7 @@ class ActsAsReferredTest < ActiveSupport::TestCase
   def piwik_params
     { 
       referrer: 'http://www.nsa.gov/about/values/index.shtml?attr=terror&reason=politics',
-      request: "http://domain.com/foo?pk_campaign=Explosives&pk_term=dynamite"
+      request: "http://domain.com/foo?pk_campaign=Explosives&pk_kwd=dynamite"
     }
   end
 

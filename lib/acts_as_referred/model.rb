@@ -26,6 +26,12 @@ module ActsAsReferred
       # campaign-based request
       scope :campaigns, -> { where('is_campaign=?', true) }
 
+      # tags as used by google or piwik in campaign-tracking
+      TAGS = {  
+                campaign: %w{ pk_campaign utm_campaign gclid },
+                keyword: %w{ pk_kwd utm_term}
+              }
+
       # returns referrer as instance of URI
       def origin_uri
         has_referrer? ? URI.parse(origin) : nil
@@ -70,67 +76,31 @@ module ActsAsReferred
 
       def process_request
         if self.request_query
-          if self.request_query.match(/utm_campaign/) || self.request_query.match(/utm_term/)
-            return process_google_tagged(self.request_query)
-          end
-          if self.request_query.match(/pk_campaign/) || self.request_query.match(/pk_kwd/)
-            return process_piwik_tagged(self.request_query)
-          end
-          if self.request_query.match(/gclid/)
-            return process_google_auto_tagged(self.request_query)
+          TAGS.values.flatten.each do |word| 
+            if self.request_query.match(word)
+              return process_tagged
+            end
           end
         end
       end
 
-      
+
       # a.t.m. only care about campaign name and keywords
-      def process_google_tagged(string)
-        hash = Hash[* string.split('&').collect { |i| i.split('=') }.flatten]
+      def process_tagged
+        hash = Hash[*(self.request_query.split('&').collect { |i| i.split('=') }.flatten)]
         retval = nil
-        hash.keys.each do |key|
-          case key
-          #when 'utm_source'
-          #  source = hash[key]
-          when 'utm_campaign'
-            self.campaign = hash[key]
-            retval = true
-          #when 'utm_medium'
-          #  medium = hash[key]
-          when 'utm_term'
-            self.keywords = hash[key]
-            retval = true
-          end
-        end
-        retval
-      end
-      
-      # standard piwik campaign-tracking
-      def process_piwik_tagged(string)
-        hash = Hash[*(string.split('&').collect { |i| i.split('=') }.flatten)]
-        retval = nil
-        hash.keys.each do |key|
-          case key
-          when 'pk_campaign'
-            self.campaign = hash[key]
-            retval = true
-          when 'pk_kwd'
-            self.keywords = hash[key]
-            retval = true
-          end
-        end
-        retval
-      end
 
-      # adwords set to autotagging
-      # no chance to get campaign info by url
-      # would have to do cookie parsing - what would suck
-      def process_google_auto_tagged(string)
-        hash = Hash[* string.split('|').collect { |i| i.split('=') }.flatten]
-        retval = nil
-        if hash['gclid']
-          self.campaign = "Adwords - autotagged: #{hash['gclid']}"
-          self.is_campaign = true
-          retval = true
+        TAGS[:campaign].each do |t|
+          if hash[t]
+            self.campaign = hash[t] if self.campaign.nil? || self.campaign.empty?
+            retval = true
+          end
+        end
+        TAGS[:keyword].each do |k|
+          if hash[k]
+            self.keywords = hash[k] if self.keywords.nil? || self.keywords.empty?
+            retval = true 
+          end
         end
         retval
       end

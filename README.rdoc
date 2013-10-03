@@ -1,5 +1,5 @@
 
-{<img src="https://badge.fury.io/rb/acts_as_referred.png" alt="Gem Version" />}[http://badge.fury.io/rb/acts_as_referred] {<img src="https://travis-ci.org/erpe/acts_as_referred.png" />}[https://travis-ci.org/erpe/acts_as_referred]
+{<img src="https://badge.fury.io/rb/acts_as_referred.png" alt="Gem Version" />}[http://badge.fury.io/rb/acts_as_referred] {<img src="https://travis-ci.org/erpe/acts_as_referred.png" />}[https://travis-ci.org/erpe/acts_as_referred] {<img src="https://codeclimate.com/repos/524d89e2f3ea00328a0fbb91/badges/b4046748a27bfa99b07b/gpa.png" />}[https://codeclimate.com/repos/524d89e2f3ea00328a0fbb91/feed]
 
 = ActsAsReferred
 
@@ -15,14 +15,13 @@ The action then makes this data available to your model. When supplied with +act
 
 == Status 
 
-not yet production ready
+staging...
 
 == Install 
 
-at this stage only by github:
-so add to your Gemfile  
+Add to your Gemfile  
 
-  gem 'acts_as_referred', :git => 'git://github.com/erpe/acts_as_referred.git'
+  gem 'acts_as_referred'
 
 afterwards run the rake task to create necessary database table
 
