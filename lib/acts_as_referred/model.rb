@@ -84,27 +84,28 @@ module ActsAsReferred
         end
       end
 
-
       # a.t.m. only care about campaign name and keywords
       def process_tagged
-        hash = Hash[*(self.request_query.split('&').collect { |i| i.split('=') }.flatten)]
+        hash = splatten_hash
         retval = nil
-
-        TAGS[:campaign].each do |t|
-          if hash[t]
-            self.campaign = hash[t] if self.campaign.nil? || self.campaign.empty?
-            retval = true
-          end
-        end
-        TAGS[:keyword].each do |k|
-          if hash[k]
-            self.keywords = hash[k] if self.keywords.nil? || self.keywords.empty?
-            retval = true 
+        TAGS.keys.each do |key|
+          TAGS[key].each do |x|
+            if key == :campaign && hash[x]
+              self.campaign = hash[x] if self.campaign.nil? || self.campaign.empty?
+              retval = true
+            elsif key == :keyword && hash[x]
+              self.keywords = hash[x] if self.keywords.nil? || self.keywords.empty?
+              retval = true 
+            end
           end
         end
         retval
       end
       
+      def splatten_hash
+        Hash[*(self.request_query.split('&').collect { |i| i.split('=') }.flatten)]
+      end
+
       def process_origin
         self.origin_host = URI.parse(origin).host
       end
