@@ -16,20 +16,20 @@ class ActsAsReferredTest < ActiveSupport::TestCase
 
   
 
-  test "truth" do
+  test 'truth' do
     assert_kind_of Module, ActsAsReferred
   end
 
-  test "test_a_booking_referrer_host_should_be_nsa" do
+  test 'test_a_booking_referrer_host_should_be_nsa' do
     booking = prepare_booking(piwik_params)
-    assert_equal "www.nsa.gov", booking.referee.origin_host
+    assert_equal 'www.nsa.gov', booking.referee.origin_host
   end
 
-  test "test_a_booking_referrer_host_should_be_google" do
+  test 'test_a_booking_referrer_host_should_be_google' do
     assert_equal 'google.com', prepare_booking(google_params).referee.origin_host
   end
 
-  test "test_a_booking_request_path_should_be_foo" do
+  test 'test_a_booking_request_path_should_be_foo' do
     assert_equal '/foo', prepare_booking(piwik_params).referee.request_path
   end
 
@@ -60,36 +60,36 @@ class ActsAsReferredTest < ActiveSupport::TestCase
 
   def no_referer_params
     { 
-      request: "http://domain.com/foo?pk_campaign=Explosives&pk_kwd=dynamite"
+      request: 'http://domain.com/foo?pk_campaign=Explosives&pk_kwd=dynamite'
     }
 
   end
 
   def direct_params
     {
-    request: "http://domain.com/foo",
-    referrer: "http://domain.com"
+    request: 'http://domain.com/foo',
+    referrer: 'http://domain.com'
     }
   end
 
   def piwik_params
     { 
       referrer: 'http://www.nsa.gov/about/values/index.shtml?attr=terror&reason=politics',
-      request: "http://domain.com/foo?pk_campaign=Explosives&pk_kwd=dynamite"
+      request: 'http://domain.com/foo?pk_campaign=Explosives&pk_kwd=dynamite'
     }
   end
 
   def google_params
     { 
       referrer: 'https://google.com?q=store',
-      request: "http://domain.com/foo?utm_campaign=Explosives&utm_term=dynamite"
+      request: 'http://domain.com/foo?utm_campaign=Explosives&utm_term=dynamite'
     }
   end
 
   def google_params_autotagged
     { 
       referrer: 'https://google.com?q=store',
-      request: "http://domain.com/foo?gclid=236428346782346283434"
+      request: 'http://domain.com/foo?gclid=236428346782346283434'
     }
   end
   

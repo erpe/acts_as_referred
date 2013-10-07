@@ -13,28 +13,28 @@
 
 ActiveRecord::Schema.define(version: 20131002113238) do
 
-  create_table "bookings", force: true do |t|
-    t.string   "thing"
-    t.string   "referrer"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+  create_table 'bookings', force: true do |t|
+    t.string   'thing'
+    t.string   'referrer'
+    t.datetime 'created_at'
+    t.datetime 'updated_at'
   end
 
-  create_table "referees", force: true do |t|
-    t.integer "referable_id"
-    t.string  "referable_type"
-    t.boolean "is_campaign"
-    t.text    "origin"
-    t.string  "origin_host"
-    t.text    "request"
-    t.text    "request_query"
-    t.string  "campaign"
-    t.string  "keywords"
-    t.integer "visits"
+  create_table 'referees', force: true do |t|
+    t.integer 'referable_id'
+    t.string  'referable_type'
+    t.boolean 'is_campaign'
+    t.text    'origin'
+    t.string  'origin_host'
+    t.text    'request'
+    t.text    'request_query'
+    t.string  'campaign'
+    t.string  'keywords'
+    t.integer 'visits'
   end
 
-  add_index "referees", ["is_campaign"], name: "index_referees_on_is_campaign"
-  add_index "referees", ["referable_id"], name: "index_referees_on_referable_id"
-  add_index "referees", ["referable_type"], name: "index_referees_on_referable_type"
+  add_index 'referees', ['is_campaign'], name: 'index_referees_on_is_campaign'
+  add_index 'referees', ['referable_id'], name: 'index_referees_on_referable_id'
+  add_index 'referees', ['referable_type'], name: 'index_referees_on_referable_type'
 
 end

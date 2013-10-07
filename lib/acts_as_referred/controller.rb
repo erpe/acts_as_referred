@@ -72,7 +72,7 @@ module ActsAsReferred
     end
 
     def _increment_returning_count(tmp)
-      arr = tmp.split("|")
+      arr = tmp.split('|')
       arr[-1] = "ret=#{arr[-1].split('=')[-1].to_i + 1}"
       arr.join('|')
     end

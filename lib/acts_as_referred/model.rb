@@ -90,20 +90,23 @@ module ActsAsReferred
         retval = nil
         TAGS.keys.each do |key|
           TAGS[key].each do |x|
-            if key == :campaign && hash[x]
-              self.campaign = hash[x] if self.campaign.nil? || self.campaign.empty?
-              retval = true
-            elsif key == :keyword && hash[x]
-              self.keywords = hash[x] if self.keywords.nil? || self.keywords.empty?
-              retval = true 
+            if hash[x]
+              case key
+              when :campaign
+                self.campaign = hash[x] if self.campaign.nil? || self.campaign.empty?
+                retval = true
+              when :keyword
+                self.keywords = hash[x] if self.keywords.nil? || self.keywords.empty?
+                retval = true
+              end
             end
           end
         end
         retval
       end
-      
+
       def splatten_hash
-        Hash[*(self.request_query.split('&').collect { |i| i.split('=') }.flatten)]
+        Hash[*(self.request_query.split('&').map { |i| i.split('=') }.flatten)]
       end
 
       def process_origin
