@@ -43,6 +43,10 @@ module ActsAsReferred
         origin_host
       end
 
+      def from
+        is_campaign ? campaign : host
+      end
+
       # returns path part of request
       # may be nil
       def request_path
@@ -64,8 +68,9 @@ module ActsAsReferred
       private
 
       def process_request_and_referrer
-        process_origin if origin
-        
+         
+        process_origin
+
         if request && URI.parse(request).query
           self.request_query = URI.parse(request).query
           if process_request
@@ -110,7 +115,7 @@ module ActsAsReferred
       end
 
       def process_origin
-        self.origin_host = URI.parse(origin).host
+        self.origin_host = origin ? URI.parse(origin).host : 'direct'
       end
 
     end

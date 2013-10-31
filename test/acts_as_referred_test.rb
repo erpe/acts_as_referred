@@ -25,6 +25,16 @@ class ActsAsReferredTest < ActiveSupport::TestCase
     assert_kind_of ActiveSupport::TimeWithZone, booking.referee.created_at
   end
 
+  test 'responds to from and returns campaign name if request from campaign' do
+    booking = prepare_booking(piwik_params)
+    assert_equal 'Explosives', booking.referee.from
+  end
+  
+  test 'responds to from and returns "direct" if direct request' do
+    booking = prepare_booking(no_referer_params)
+    assert_equal 'direct', booking.referee.from
+  end
+  
   test 'test_a_booking_referrer_host_should_be_nsa' do
     booking = prepare_booking(piwik_params)
     assert_equal 'www.nsa.gov', booking.referee.origin_host
@@ -65,7 +75,8 @@ class ActsAsReferredTest < ActiveSupport::TestCase
 
   def no_referer_params
     { 
-      request: 'http://domain.com/foo?pk_campaign=Explosives&pk_kwd=dynamite'
+      request: 'http://domain.com/foo'
+      # ?pk_campaign=Explosives&pk_kwd=dynamite
     }
 
   end

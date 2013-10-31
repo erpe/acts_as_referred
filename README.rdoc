@@ -77,6 +77,8 @@ you can query referees after relational order was created:
 [Referee.campaigns]
   returns collection of referee-instances connected to a campaign
 
+[order.referee.from]
+  returns either campaign-name if source is campaign or referrer-host if request has referrer or 'direct' if neither campaign nor referrer
 
 == Background  
 
