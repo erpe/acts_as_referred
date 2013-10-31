@@ -12,9 +12,16 @@ namespace :acts_as_referred do
                 campaign:string 
                 keywords:string
                 visits:integer
-                          
+                created_at:datetime
+                updated_at:datetime
     }
     system("bundle exec rails g migration CreateReferee #{args.join(' ')}")
+  end
+
+  desc "add timestamps when migrating from prior 0.1.3"
+  task :add_timestamps do
+    args = %w{ created_at:datetime updated_at:datetime }
+    system("bundle exec rails g migration AddTimestampsToReferee #{args.join(' ')}")
   end
 
 end

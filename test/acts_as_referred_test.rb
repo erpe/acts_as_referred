@@ -20,6 +20,11 @@ class ActsAsReferredTest < ActiveSupport::TestCase
     assert_kind_of Module, ActsAsReferred
   end
 
+  test 'responds to created_at' do
+    booking = prepare_booking(piwik_params)
+    assert_kind_of ActiveSupport::TimeWithZone, booking.referee.created_at
+  end
+
   test 'test_a_booking_referrer_host_should_be_nsa' do
     booking = prepare_booking(piwik_params)
     assert_equal 'www.nsa.gov', booking.referee.origin_host

@@ -47,6 +47,11 @@ If you use google-adwords you have to define manual-url-tagging instead of googl
 Auto-tagging (gclid) is recognized as campaign but can not be resolved. 
 (could be by parsing e.g. google-analytics cookies - but i think its kind of bad practice to relay on googles cookie-syntax)
 
+== Update
+
+When updating from version prior 0.1.3 there is a rake task to manage the migration:
+  
+  rake acts_as_referred:add_timestamps
 
 == Usage 
 
