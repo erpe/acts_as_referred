@@ -44,7 +44,11 @@ module ActsAsReferred
       end
 
       def from
-        is_campaign ? campaign : host
+        if is_campaign
+          campaign ? campaign : "(campaign) #{host}"
+        else
+          host
+        end
       end
 
       # returns path part of request
