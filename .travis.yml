@@ -1,7 +1,7 @@
 language: ruby
 
 gemfile:
-  - gemfiles/rails4_1.gemfile
+  - gemfiles/rails4_2.gemfile
 
 before_script:
   - ci/setup.sh
