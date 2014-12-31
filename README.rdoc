@@ -12,7 +12,7 @@ This information is stored in a cookie and in the session as well. The created c
 
 The action then makes this data available to your model. When supplied with +acts_as_referred+ your pimped model will make use of a +after_create+ action to create a relational +Referee+ after it was created.
 
-gem version 0.1.7 - works with rails-4.1.8 / support of rails-4.2 will follow soon
+gem version 0.2.0  - works with rails-4.2 / use gem version 0.1.7 for rails-4.1 
 
 == Status 
 
@@ -21,8 +21,12 @@ staging...
 == Install 
 
 Add to your Gemfile  
-
-  gem 'acts_as_referred'
+  
+  # for rails-4.1
+  gem 'acts_as_referred', '>= 0.1'
+  
+  # for rails-4.2
+  gem 'acts_as_referred', '>= 0.2'
 
 afterwards run the rake task to create necessary database table
 

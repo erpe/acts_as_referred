@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    acts_as_referred (1.0.0)
+    acts_as_referred (0.2.0)
       rails (~> 4.2)
 
 GEM
